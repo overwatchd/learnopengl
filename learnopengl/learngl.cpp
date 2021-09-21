@@ -33,6 +33,7 @@ int rectangle_EBO(GLFWwindow* window, unsigned int shaderProgram);
 // 练习题
 int two_triangle(GLFWwindow* window, unsigned int shaderProgram);
 int two_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram);
+int two_color_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram, unsigned int shaderProgram_1);
 
 int main()
 {
@@ -61,12 +62,14 @@ int main()
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    unsigned int shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource_1);
+    unsigned int shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
+    unsigned int shaderProgram_1 = CreateShaderProgram(vertexShaderSource, fragmentShaderSource_1);
 
     //return triangle_VAO(window, shaderProgram);
     //return rectangle_EBO(window, shaderProgram);
     //return two_triangle(window, shaderProgram);
-    return two_VAO_triangle(window, shaderProgram);
+    //return two_VAO_triangle(window, shaderProgram);
+    return two_color_VAO_triangle(window, shaderProgram, shaderProgram_1);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -289,6 +292,67 @@ int two_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram)
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(VAO_1);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
+
+}
+
+int two_color_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram, unsigned int shaderProgram_1)
+{
+    // 使用两个VAO画两个三角
+    // 想将获取VAO封装为函数，但失败了，直接复制了两份代码
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        -0.25f, 0.5f, 0.0f,
+         0.0f, -0.5f, 0.0f,
+    };
+
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    float vertices_1[] = {
+         0.5f,  0.5f, 0.0f,
+         0.25f,-0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f,
+    };
+
+    unsigned int VBO_1;
+    glGenBuffers(1, &VBO_1);
+    unsigned int VAO_1;
+    glGenVertexArrays(1, &VAO_1);
+
+    glBindVertexArray(VAO_1);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_1);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_1), vertices_1, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        processInput(window);
+
+        // render
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glUseProgram(shaderProgram_1);
         glBindVertexArray(VAO_1);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
