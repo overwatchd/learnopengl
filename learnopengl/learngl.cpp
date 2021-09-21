@@ -64,6 +64,8 @@ int main()
 
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
     unsigned int shaderProgram_1 = CreateShaderProgram(vertexShaderSource, fragmentShaderSource_1);
+    if (!shaderProgram or !shaderProgram_1)
+        return -1;
 
     //return triangle_VAO(window, shaderProgram);
     //return rectangle_EBO(window, shaderProgram);
@@ -96,6 +98,7 @@ unsigned int CreateShaderProgram(const char* vertexShaderSrc, const char* fragme
     {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return 0;
     }
 
     unsigned int fragmentShader;
@@ -112,6 +115,7 @@ unsigned int CreateShaderProgram(const char* vertexShaderSrc, const char* fragme
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::LINK_FAILED\n" << infoLog << std::endl;
+        return 0;
     }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
