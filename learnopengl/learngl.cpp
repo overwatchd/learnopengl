@@ -21,6 +21,9 @@ void processInput(GLFWwindow* window);
 int triangle_VAO(GLFWwindow* window, unsigned int shaderProgram);
 int rectangle_EBO(GLFWwindow* window, unsigned int shaderProgram);
 
+// 练习题
+int two_triangle(GLFWwindow* window, unsigned int shaderProgram);
+
 int main()
 {
     glfwInit();
@@ -83,7 +86,8 @@ int main()
     glDeleteShader(fragmentShader);
 
     //return triangle_VAO(window, shaderProgram);
-    return rectangle_EBO(window, shaderProgram);
+    //return rectangle_EBO(window, shaderProgram);
+    return two_triangle(window, shaderProgram);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -179,4 +183,46 @@ int rectangle_EBO(GLFWwindow* window, unsigned int shaderProgram)
     }
 
     return 0;
+}
+
+int two_triangle(GLFWwindow* window, unsigned int shaderProgram)
+{
+    // 两个相连的三角
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         -0.25f,  0.5f, 0.0f,
+         0.0f, -0.5f, 0.0f,
+         0.25f, 0.5f, 0.0f, // 增加两个点
+         0.5f, -0.5f,0.0f
+    };
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        processInput(window);
+
+        // render
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 2, 3);   // 第二个三角的起始索引为2，还是画三个点
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
+
 }
