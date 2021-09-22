@@ -136,10 +136,59 @@ namespace uniform {
         return 0;
     }
 
+    // ¡∑œ∞
+    int updown_vertex(GLFWwindow* window);  // ∂•µ„»√»˝Ω«µπ¡¢
+
     int enter(GLFWwindow* window)
     {
         //return triangle_Uniform(window);
-        return triangle_three_color(window);
+        //return triangle_three_color(window);
+        return updown_vertex(window);
+    }
+
+    int updown_vertex(GLFWwindow* window)
+    {
+        float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f
+        };
+
+        unsigned int VBO;
+        glGenBuffers(1, &VBO);
+        unsigned int VAO;
+        glGenVertexArrays(1, &VAO);
+
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        Shader shader = Shader("./updown.vert", "./vert_color.frag");
+
+        while (!glfwWindowShouldClose(window))
+        {
+            processInput(window);
+
+            // render
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            float timeValue = float(glfwGetTime());
+            float redValue = (sin(timeValue) / 2.0f) + 0.5f;
+            shader.use();
+            shader.setFloat("ourRed", redValue);
+
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+
+        glfwTerminate();
+        return 0;
     }
 
 }

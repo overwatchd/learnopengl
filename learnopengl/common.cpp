@@ -19,13 +19,20 @@ unsigned int CreateShaderProgram(const char* vertexShaderSrc, const char* fragme
     {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        return 0;
+        return -1;
     }
 
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSrc, NULL);
     glCompileShader(fragmentShader);
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return -1;
+    }
 
     unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
@@ -36,7 +43,7 @@ unsigned int CreateShaderProgram(const char* vertexShaderSrc, const char* fragme
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::LINK_FAILED\n" << infoLog << std::endl;
-        return 0;
+        return -1;
     }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);

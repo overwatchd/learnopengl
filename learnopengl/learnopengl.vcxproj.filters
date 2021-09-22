@@ -24,6 +24,9 @@
     <ClCompile Include="common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -35,5 +38,16 @@
     <ClInclude Include="2_uniform.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="updown.vert">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="vert_color.frag">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
