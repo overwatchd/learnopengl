@@ -1,6 +1,7 @@
 #include "common.h"
 #include "1_triangle.hpp"
 #include "2_uniform.hpp"
+#include "3_textures.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -39,7 +40,8 @@ int main()
     std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
 
     //return triangle::enter(window);
-    return uniform::enter(window);
+    //return uniform::enter(window);
+    return textures::enter(window);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
