@@ -138,12 +138,16 @@ namespace uniform {
 
     // 练习
     int updown_vertex(GLFWwindow* window);  // 顶点让三角倒立
+    int move_vertex(GLFWwindow* window);  // 让三角动起来
+    int move_color_vertex(GLFWwindow* window);  // 让三角动起来
 
     int enter(GLFWwindow* window)
     {
         //return triangle_Uniform(window);
         //return triangle_three_color(window);
-        return updown_vertex(window);
+        //return updown_vertex(window);
+        //return move_vertex(window);
+        return move_color_vertex(window);
     }
 
     int updown_vertex(GLFWwindow* window)
@@ -191,4 +195,93 @@ namespace uniform {
         return 0;
     }
 
+    int move_vertex(GLFWwindow* window)
+    {
+        float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f
+        };
+
+        unsigned int VBO;
+        glGenBuffers(1, &VBO);
+        unsigned int VAO;
+        glGenVertexArrays(1, &VAO);
+
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        Shader shader = Shader("./move.vert", "./vert_color.frag");
+
+        while (!glfwWindowShouldClose(window))
+        {
+            processInput(window);
+
+            // render
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            float timeValue = float(glfwGetTime());
+            float xShift = sin(timeValue);
+            shader.use();
+            shader.setFloat("xShift", xShift);
+
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+
+        glfwTerminate();
+        return 0;
+    }
+
+    int move_color_vertex(GLFWwindow* window)
+    {
+        float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.0f,  0.5f, 0.0f
+        };
+
+        unsigned int VBO;
+        glGenBuffers(1, &VBO);
+        unsigned int VAO;
+        glGenVertexArrays(1, &VAO);
+
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        Shader shader = Shader("./pos_color.vert", "./pos_color.frag");
+
+        while (!glfwWindowShouldClose(window))
+        {
+            processInput(window);
+
+            // render
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            float timeValue = float(glfwGetTime());
+            float xShift = sin(timeValue);
+            shader.use();
+            shader.setFloat("xShift", xShift);
+
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+
+        glfwTerminate();
+        return 0;
+    }
 }

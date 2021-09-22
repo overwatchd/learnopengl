@@ -144,8 +144,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Users\sth32\Downloads\glad\src\glad.c" />
     <ClCompile Include="common.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="learngl.cpp" />
     <ClCompile Include="shader.cpp" />
   </ItemGroup>
@@ -156,6 +156,9 @@
     <ClInclude Include="shader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="move.vert" />
+    <None Include="pos_color.frag" />
+    <None Include="pos_color.vert" />
     <None Include="vert_color.frag" />
     <None Include="updown.vert" />
   </ItemGroup>
