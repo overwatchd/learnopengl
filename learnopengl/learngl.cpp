@@ -23,6 +23,15 @@ const char* fragmentShaderSource_1 = "#version 330 core\n"
 "    FragColor = vec4(0.1f, 0.5f, 0.6f, 1.0f);\n"
 "}\0";
 
+const char* fragmentShaderSource_u = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"uniform vec4 ourColor;\n"
+"void main()\n"
+"{\n"
+"    FragColor = ourColor;\n"
+"}\n";
+
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 unsigned int CreateShaderProgram(const char* vertexShaderSrc, const char* fragmentShaderSrc);
@@ -34,6 +43,8 @@ int rectangle_EBO(GLFWwindow* window, unsigned int shaderProgram);
 int two_triangle(GLFWwindow* window, unsigned int shaderProgram);
 int two_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram);
 int two_color_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram, unsigned int shaderProgram_1);
+
+int triangle_Uniform(GLFWwindow* window, unsigned int shaderProgram);
 
 int main()
 {
@@ -62,8 +73,13 @@ int main()
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    int nrAttributes;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+    std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
+
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
     unsigned int shaderProgram_1 = CreateShaderProgram(vertexShaderSource, fragmentShaderSource_1);
+    unsigned int shaderPrograde_u = CreateShaderProgram(vertexShaderSource, fragmentShaderSource_u);
     if (!shaderProgram or !shaderProgram_1)
         return -1;
 
@@ -71,7 +87,8 @@ int main()
     //return rectangle_EBO(window, shaderProgram);
     //return two_triangle(window, shaderProgram);
     //return two_VAO_triangle(window, shaderProgram);
-    return two_color_VAO_triangle(window, shaderProgram, shaderProgram_1);
+    //return two_color_VAO_triangle(window, shaderProgram, shaderProgram_1);
+    return triangle_Uniform(window, shaderPrograde_u);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -367,4 +384,47 @@ int two_color_VAO_triangle(GLFWwindow* window, unsigned int shaderProgram, unsig
     glfwTerminate();
     return 0;
 
+}
+
+int triangle_Uniform(GLFWwindow* window, unsigned int shaderProgram)
+{
+    float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+    };
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        processInput(window);
+
+        // render
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUseProgram(shaderProgram);
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
 }
