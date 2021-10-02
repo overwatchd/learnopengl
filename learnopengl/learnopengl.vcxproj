@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Workspace\opengl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Workspace\opengl\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildStartupDirectory)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildStartupDirectory)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
