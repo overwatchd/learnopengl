@@ -50,6 +50,9 @@
     <ClInclude Include="3_textures.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="4_vector.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="updown.vert">
@@ -73,6 +76,7 @@
     <None Include="texture.frag">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="vector.vert" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="learnopengl.rc">

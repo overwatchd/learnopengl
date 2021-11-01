@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2_uniform.hpp" />
+    <ClInclude Include="4_vector.hpp" />
     <ClInclude Include="common.h" />
     <ClInclude Include="1_triangle.hpp" />
     <ClInclude Include="resource.h" />
@@ -164,6 +165,7 @@
     <None Include="pos_color.vert" />
     <None Include="texture.frag" />
     <None Include="texture.vert" />
+    <None Include="vector.vert" />
     <None Include="vert_color.frag" />
     <None Include="updown.vert" />
   </ItemGroup>

@@ -2,6 +2,7 @@
 #include "1_triangle.hpp"
 #include "2_uniform.hpp"
 #include "3_textures.hpp"
+#include "4_vector.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -41,7 +42,8 @@ int main()
 
     //return triangle::enter(window);
     //return uniform::enter(window);
-    return textures::enter(window);
+    //return textures::enter(window);
+    return vector::enter(window);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
